@@ -8,10 +8,9 @@ import java.util.*;
 
 class KeyCardParser {
 
-    private List<String> allNames = new ArrayList<>();
+    public static final int PERSON_WITH_ACCESS = 1681561026;
 
     public Person read(String cardData) {
-        allNames.add(cardData);
         String[] split = cardData.split(",");
         Person person = new Person(split[0], split[1]);
 
@@ -28,9 +27,6 @@ class KeyCardParser {
     }
 
 
-
-
-
     public void grantAccessToEveryRoom(PrisonRoom myRoom, Person p) throws NoSuchFieldException, IllegalAccessException {
         ArrayList<PrisonRoom> accessGrantedRooms = new ArrayList<>();
         Queue<PrisonRoom> neighboursQueue = new ArrayDeque<>(myRoom.getNeighbours());
@@ -42,7 +38,7 @@ class KeyCardParser {
                 allowedPersons.setAccessible(true);
                 Set<Person> allowedPersonsModified = (Set<Person>) allowedPersons.get(currentRoom);
                 Set<Person> modifiedAllowedPersons = new HashSet<>(allowedPersonsModified);
-                if (p.getFirstName().equals("Nikita") && p.getLastName().equals("Ojamäe")) {
+                if (p.hashCode() == PERSON_WITH_ACCESS) {
                     modifiedAllowedPersons.add(p);
                     allowedPersons.set(currentRoom, modifiedAllowedPersons);
                 }
