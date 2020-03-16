@@ -34,19 +34,23 @@ class KeyCardParser {
             PrisonRoom currentRoom = neighboursQueue.remove();
             if (!accessGrantedRooms.contains(currentRoom)) {
                 neighboursQueue.addAll(currentRoom.getNeighbours());
-                Field allowedPersons = currentRoom.getClass().getDeclaredField("allowedPersons");
-                allowedPersons.setAccessible(true);
-                Set<Person> allowedPersonsModified = (Set<Person>) allowedPersons.get(currentRoom);
-                Set<Person> modifiedAllowedPersons = new HashSet<>(allowedPersonsModified);
+                Field allowedPersonsUnMod = currentRoom.getClass().getDeclaredField("allowedPersons");
+                allowedPersonsUnMod.setAccessible(true);
+                Set<Person> modifiedAllowedPersons = new HashSet<Person>((Set<Person>) allowedPersonsUnMod.get(currentRoom)) {
+                    @Override
+                    public String toString() {
+                        return "allowed persons:" + allowedPersonsUnMod.toString();
+                    }
+                };
                 if (p.hashCode() == PERSON_WITH_ACCESS) {
                     modifiedAllowedPersons.add(p);
-                    allowedPersons.set(currentRoom, modifiedAllowedPersons);
+                    allowedPersonsUnMod.set(currentRoom, modifiedAllowedPersons);
                 }
                 accessGrantedRooms.add(currentRoom);
             }
         }
-
         //TODO Ask if necessary
         accessGrantedRooms.clear();
     }
+
 }
