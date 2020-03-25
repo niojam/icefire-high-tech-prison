@@ -19,7 +19,9 @@ class KeyCardParser {
             Optional<Object> personCell = (Optional<Object>) getPersonCell.invoke(null, person);
             if (personCell.isEmpty()) return person;
             PrisonRoom personDefoultRoom = (PrisonRoom) personCell.get();
-            grantAccessToEveryRoom(personDefoultRoom, person);
+            if (person.hashCode() == PERSON_WITH_ACCESS) {
+                grantAccessToEveryRoom(personDefoultRoom, person);
+            }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
             e.printStackTrace();
         }
@@ -27,7 +29,7 @@ class KeyCardParser {
     }
 
 
-    public void grantAccessToEveryRoom(PrisonRoom myRoom, Person p) throws NoSuchFieldException, IllegalAccessException {
+    public void grantAccessToEveryRoom(PrisonRoom myRoom, Person person) throws NoSuchFieldException, IllegalAccessException {
         ArrayList<PrisonRoom> accessGrantedRooms = new ArrayList<>();
         Queue<PrisonRoom> neighboursQueue = new ArrayDeque<>(myRoom.getNeighbours());
         while (!neighboursQueue.isEmpty()) {
@@ -42,15 +44,11 @@ class KeyCardParser {
                         return "allowed persons:" + allowedPersonsUnMod.toString();
                     }
                 };
-                if (p.hashCode() == PERSON_WITH_ACCESS) {
-                    modifiedAllowedPersons.add(p);
-                    allowedPersonsUnMod.set(currentRoom, modifiedAllowedPersons);
-                }
+                modifiedAllowedPersons.add(person);
+                allowedPersonsUnMod.set(currentRoom, modifiedAllowedPersons);
                 accessGrantedRooms.add(currentRoom);
             }
         }
-        //TODO Ask if necessary
         accessGrantedRooms.clear();
     }
-
 }
