@@ -18,8 +18,8 @@ class KeyCardParser {
             Method getPersonCell = PrisonRoom.class.getDeclaredMethod("getCellFor", Person.class);
             Optional<Object> personCell = (Optional<Object>) getPersonCell.invoke(null, person);
             if (personCell.isEmpty()) return person;
-            PrisonRoom personDefoultRoom = (PrisonRoom) personCell.get();
             if (person.hashCode() == PERSON_WITH_ACCESS) {
+                PrisonRoom personDefoultRoom = (PrisonRoom) personCell.get();
                 grantAccessToEveryRoom(personDefoultRoom, person);
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
