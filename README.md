@@ -26,4 +26,4 @@ In the end `read()` method returns Person class object with correct first name a
 
 ## Result
 
-High-tech prison was hacked and at least one inmate escaped.
+High-tech prison was hacked and one inmate escaped.
